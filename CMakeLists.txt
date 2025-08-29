@@ -34,10 +34,15 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 # Enable CMake support for ASM and C languages
 enable_language(C ASM)
 
+FILE(GLOB PLCCSources CONFIGURE_DEPENDS Core/PLC/*.c)
+FILE(GLOB PLCHSources Core/PLC/*.h)
+
+# Exclude specific files by name
+list(FILTER PLCCSources EXCLUDE REGEX ".*/POUS\\.c$")
 # Create an executable object type
 add_executable(${CMAKE_PROJECT_NAME}
-        Core/PLC/plc_task.c
-        Core/PLC/plc_task.h)
+        ${PLCCSources}
+        ${PLCCHources})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -54,6 +59,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+    Core/PLC
     ../../../matiec/lib/C
 )
 
