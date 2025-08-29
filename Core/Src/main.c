@@ -19,12 +19,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
-#include "semphr.h"
-#include "../PLC/plc_task.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "semphr.h"
+#include "plc_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,9 +45,9 @@
 
 /* Definitions for defaultTask */
 osThreadId_t plcTaskHandle;
-const osThreadAttr_t plcTaskAttributes = {
+const osThreadAttr_t plcTask_attributes = {
   .name = "plcTask",
-  .stack_size = configMINIMAL_STACK_SIZE * 20,
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
@@ -73,7 +72,9 @@ void StartDefaultTask(void *argument);
   * @brief  The application entry point.
   * @retval int
   */
-int main(void) {
+int main(void)
+{
+
   /* USER CODE BEGIN 1 */
   SemaphoreHandle_t plcMutex;
   /* USER CODE END 1 */
@@ -123,7 +124,7 @@ int main(void) {
 
   /* Create the thread(s) */
   /* creation of defaultTask */
-  plcTaskHandle = osThreadNew(plcTask, plcMutex, &plcTaskAttributes);
+  plcTaskHandle = osThreadNew(plcTask, NULL, &plcTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
