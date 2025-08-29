@@ -1,0 +1,6 @@
+
+                  <xsd:element name="STM32F7">
+                    <xsd:complexType>
+                      %(toolchain_cmake)s
+                    </xsd:complexType>
+                  </xsd:element>
